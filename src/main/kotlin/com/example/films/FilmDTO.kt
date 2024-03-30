@@ -1,6 +1,6 @@
 package com.example.films
 
-class FilmDTO (
+data class FilmDTO (
     val movie_id: Int,
     val title: String?,
     val titleEn: String?,
@@ -10,6 +10,5 @@ class FilmDTO (
     val length: Int,
     val description: String?,
     val releaseDate: String,
-    val ageLimit: String?,
-    val trailerLink: String?,
+    val ageLimit: String?
 )
