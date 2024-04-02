@@ -14,6 +14,7 @@ class UserServiceImpl : UserService {
         var statement: InsertStatement<Number>? = null
         dbQuery{
             statement= Users.insert{
+                it[id]=params.id
                 it[email] = params.email
                 it[parol_user]=params.parol_user
                 it[username]=params.username
