@@ -14,7 +14,6 @@ class UserServiceImpl : UserService {
         var statement: InsertStatement<Number>? = null
         dbQuery{
             statement= Users.insert{
-                it[id]=params.id
                 it[email] = params.email
                 it[parol_user]=params.parol_user
                 it[username]=params.username
@@ -37,7 +36,6 @@ class UserServiceImpl : UserService {
         return if(row == null) {
             null
         } else UserDTO(
-            id = row[Users.id],
             email= row[Users.email],
             parol_user = row[Users.parol_user],
             username = row[Users.username],
