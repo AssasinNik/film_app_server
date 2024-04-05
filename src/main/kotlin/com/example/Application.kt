@@ -5,6 +5,7 @@ import com.example.plugins.*
 import com.example.repository.UserRepository
 import com.example.repository.UserRepositoryImpl
 import com.example.routes.authRoutes
+import com.example.secure.configureSecurity
 import com.example.service.UserService
 import com.example.service.UserServiceImpl
 import io.ktor.server.plugins.contentnegotiation.*
@@ -21,8 +22,14 @@ fun Application.module() {
     install(ContentNegotiation) {
         jackson()
     }
+    configureSecurity()
+
+
     val service: UserService=UserServiceImpl()
     val repository: UserRepository=UserRepositoryImpl(service)
+
+
     authRoutes(repository)
+
     configureRouting()
 }

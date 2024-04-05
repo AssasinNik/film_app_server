@@ -1,6 +1,7 @@
 package com.example.service
 
 import com.example.data.DataBase.dbQuery
+import com.example.secure.hash
 import com.example.user.UserDTO
 import com.example.user.Users
 import org.jetbrains.exposed.sql.ResultRow
@@ -15,7 +16,7 @@ class UserServiceImpl : UserService {
         dbQuery{
             statement= Users.insert{
                 it[email] = params.email
-                it[parol_user]=params.parol_user
+                it[parol_user]=hash(params.parol_user)
                 it[username]=params.username
                 it[image]=params.image
 
@@ -36,8 +37,8 @@ class UserServiceImpl : UserService {
         return if(row == null) {
             null
         } else UserDTO(
+            id= row[Users.id],
             email= row[Users.email],
-            parol_user = row[Users.parol_user],
             username = row[Users.username],
             image = row[Users.image]
         )

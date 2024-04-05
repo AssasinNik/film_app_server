@@ -1,5 +1,6 @@
 package com.example.repository
 
+import com.example.secure.JWTauth
 import com.example.service.CreateUserParams
 import com.example.service.UserService
 import com.example.utils.Response
@@ -11,7 +12,8 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }else{
             val user=userService.registerUser(params)
             if(user != null){
-                //@Todo generate token for user
+                val token = JWTauth.instance.createToken(user.id)
+                user.token = token
                 Response.SuccessResponse(data = user)
             }else{
                 Response.ErrorResponse()
