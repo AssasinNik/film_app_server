@@ -18,7 +18,6 @@ class UserServiceImpl : UserService {
                 it[email] = params.email
                 it[parol_user]=hash(params.parol_user)
                 it[username]=params.username
-                it[image]=params.image
 
             }
         }
