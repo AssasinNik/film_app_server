@@ -2,6 +2,7 @@ package com.example.repository
 
 import com.example.secure.JWTauth
 import com.example.service.CreateUserParams
+import com.example.service.LoginUserParams
 import com.example.service.UserService
 import com.example.utils.Response
 
@@ -12,8 +13,6 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }else{
             val user=userService.registerUser(params)
             if(user != null){
-                val token = JWTauth.instance.createToken(user.id)
-                user.token = token
                 Response.SuccessResponse(data = user)
             }else{
                 Response.ErrorResponse()
@@ -21,8 +20,14 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }
     }
 
-    override suspend fun loginUser(email: String, password: String): Response<Any> {
-        TODO("Not yet implemented")
+    override suspend fun loginUser(params: LoginUserParams): Response<Any> {
+        val user= userService.findUser(params.email, params.parol_user)
+        return if(user!=null){
+            Response.SuccessResponse(data=user)
+        }
+        else{
+            Response.ErrorResponse(message="User does not exist")
+        }
     }
 
     private suspend fun isEmailExist(email: String): Boolean{

@@ -1,11 +1,13 @@
 package com.example.service
 
 import com.example.data.DataBase.dbQuery
+import com.example.secure.JWTauth
 import com.example.secure.hash
 import com.example.user.UserDTO
 import com.example.user.Users
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -18,7 +20,7 @@ class UserServiceImpl : UserService {
                 it[email] = params.email
                 it[parol_user]=hash(params.parol_user)
                 it[username]=params.username
-
+                it[token]= JWTauth.instance.createToken(params.id)
             }
         }
         return rowToUser(statement?.resultedValues?.get(0))
@@ -31,6 +33,13 @@ class UserServiceImpl : UserService {
         }
         return user
     }
+    override suspend fun findUser(email: String, password: String): UserDTO? {
+        val user= dbQuery {
+            Users.select(Users.email.eq(email) and Users.parol_user.eq(hash(password)))
+                .map { rowToUser(it) }.singleOrNull()
+        }
+        return user
+    }
 
     private fun rowToUser(row: ResultRow?): UserDTO? {
         return if(row == null) {
@@ -39,7 +48,8 @@ class UserServiceImpl : UserService {
             id= row[Users.id],
             email= row[Users.email],
             username = row[Users.username],
-            image = row[Users.image]
+            image = row[Users.image],
+            token = row[Users.token]
         )
     }
 }
