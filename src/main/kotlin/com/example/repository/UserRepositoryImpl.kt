@@ -3,6 +3,7 @@ package com.example.repository
 import com.example.secure.JWTauth
 import com.example.service.CreateUserParams
 import com.example.service.LoginUserParams
+import com.example.service.TokenParams
 import com.example.service.UserService
 import com.example.utils.Response
 
@@ -33,6 +34,16 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
             else{
                 Response.ErrorResponse(message = "Invalid password")
             }
+        }
+        else{
+            Response.ErrorResponse(message="User does not exist")
+        }
+    }
+
+    override suspend fun InfoByToken(params: TokenParams): Response<Any> {
+        val user= userService.findByToken(params.token)
+        return if(user!=null){
+            Response.SuccessResponse(data = user)
         }
         else{
             Response.ErrorResponse(message="User does not exist")

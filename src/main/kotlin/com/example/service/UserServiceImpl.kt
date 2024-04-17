@@ -40,6 +40,14 @@ class UserServiceImpl : UserService {
         return user
     }
 
+    override suspend fun findByToken(token: String): UserDTO? {
+        val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
+        val user= dbQuery {
+            Users.select(Users.email.eq(decode))
+                .map { rowToUser(it) }.singleOrNull()
+        }
+        return user
+    }
     private fun rowToUser(row: ResultRow?): UserDTO? {
         return if(row == null) {
             null

@@ -3,6 +3,7 @@ package com.example.routes
 import com.example.repository.UserRepository
 import com.example.service.CreateUserParams
 import com.example.service.LoginUserParams
+import com.example.service.TokenParams
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -20,6 +21,11 @@ fun Application.authRoutes(repository: UserRepository){
             post("/login"){
                 val params =call.receive<LoginUserParams>()
                 val result = repository.loginUser(params)
+                call.respond(result.statusCode, result)
+            }
+            post("/authenticate"){
+                val params = call.receive<TokenParams>()
+                val result = repository.InfoByToken(params)
                 call.respond(result.statusCode, result)
             }
         }

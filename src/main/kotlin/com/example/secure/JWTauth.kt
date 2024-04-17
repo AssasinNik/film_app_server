@@ -19,12 +19,17 @@ class JWTauth private constructor(secret: String) {
         .withAudience(Audience)
         .withClaim(Claim, email)
         .sign(algorithm)
-
+    fun decodeToken(token: String, secret: String): String {
+        val algorithm = Algorithm.HMAC256(secret)
+        val verifier = JWT.require(algorithm).build()
+        val jwt = verifier.verify(token)
+        return jwt.getClaim("email").asString()
+    }
 
     companion object{
         private const val Issuer="film_app"
         private const val Audience="film_app"
-        const val Claim="id"
+        const val Claim="email"
 
         lateinit var instance: JWTauth
             private set
