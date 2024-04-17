@@ -20,7 +20,6 @@ class UserServiceImpl : UserService {
                 it[email] = params.email
                 it[parol_user]=hash(params.parol_user)
                 it[username]=params.username
-                it[token]= JWTauth.instance.createToken(params.id)
             }
         }
         return rowToUser(statement?.resultedValues?.get(0))
@@ -49,7 +48,6 @@ class UserServiceImpl : UserService {
             email= row[Users.email],
             username = row[Users.username],
             image = row[Users.image],
-            token = row[Users.token]
         )
     }
 }

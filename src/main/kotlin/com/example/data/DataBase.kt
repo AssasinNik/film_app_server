@@ -16,7 +16,7 @@ object DataBase {
     private fun hikari(): HikariDataSource{
         val config=HikariConfig()
         config.driverClassName="org.postgresql.Driver"
-        config.jdbcUrl="jdbc:postgresql://localhost:5432/film_app?user=postgres&password=******"
+        config.jdbcUrl="jdbc:postgresql://localhost:5432/film_app?user=postgres&password=Parol1810!"
         config.maximumPoolSize=3
         config.isAutoCommit=false
         config.transactionIsolation="TRANSACTION_REPEATABLE_READ"

@@ -8,6 +8,5 @@ object Users: Table("users") {
     val email= Users.varchar("email", 320)
     val parol_user=Users.varchar("parol_user", 200)
     val image=Users.varchar("image", 150)
-    val token = Users.varchar("token", 200)
     override val primaryKey=PrimaryKey(id)
 }

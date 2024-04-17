@@ -13,11 +13,11 @@ class JWTauth private constructor(secret: String) {
         .build()
 
 
-    fun createToken(id : Int) : String = JWT
+    fun createToken(email : String) : String = JWT
         .create()
         .withIssuer(Issuer)
         .withAudience(Audience)
-        .withClaim(Claim, id)
+        .withClaim(Claim, email)
         .sign(algorithm)
 
 
