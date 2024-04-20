@@ -5,6 +5,7 @@ import com.example.plugins.*
 import com.example.repository.UserRepository
 import com.example.repository.UserRepositoryImpl
 import com.example.routes.authRoutes
+import com.example.routes.changeData
 import com.example.secure.configureSecurity
 import com.example.service.UserService
 import com.example.service.UserServiceImpl
@@ -58,6 +59,7 @@ fun Application.module() {
 
 
     authRoutes(repository)
+    changeData(repository)
 
     configureRouting()
 }

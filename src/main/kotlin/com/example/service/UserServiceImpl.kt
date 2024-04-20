@@ -5,11 +5,8 @@ import com.example.secure.JWTauth
 import com.example.secure.hash
 import com.example.user.UserDTO
 import com.example.user.Users
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class UserServiceImpl : UserService {
@@ -48,6 +45,37 @@ class UserServiceImpl : UserService {
         }
         return user
     }
+
+    override suspend fun change_image(email: String, image: String): Boolean {
+        val user= findByEmail(email)
+        if(user!=null){
+            dbQuery {
+                Users.update({ Users.email eq email }) {
+                    it[Users.image]=image
+                }
+            }
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
+    override suspend fun change_password(email: String, password: String, new_password: String?): Boolean {
+        val user= findUser(email, password)
+        if(user!=null){
+            dbQuery {
+                Users.update({ Users.email eq email }) {
+                    it[Users.parol_user]=hash(new_password)
+                }
+            }
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
     private fun rowToUser(row: ResultRow?): UserDTO? {
         return if(row == null) {
             null

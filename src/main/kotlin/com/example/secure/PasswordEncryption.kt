@@ -10,8 +10,8 @@ private val algorithm="HmacSHA256"
 private val hashKey= hex(secret_key)
 private val hmac_key=SecretKeySpec(hashKey, algorithm)
 
-fun hash(password :String) : String{
+fun hash(password :String?) : String{
     val hmac= Mac.getInstance(algorithm)
     hmac.init(hmac_key)
-    return hex(hmac.doFinal(password.toByteArray(Charsets.UTF_8)))
+    return hex(hmac.doFinal(password?.toByteArray(Charsets.UTF_8)))
 }

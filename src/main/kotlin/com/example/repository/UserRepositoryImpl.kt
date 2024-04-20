@@ -1,10 +1,7 @@
 package com.example.repository
 
 import com.example.secure.JWTauth
-import com.example.service.CreateUserParams
-import com.example.service.LoginUserParams
-import com.example.service.TokenParams
-import com.example.service.UserService
+import com.example.service.*
 import com.example.utils.Response
 
 class UserRepositoryImpl(private val userService: UserService) : UserRepository {
@@ -47,6 +44,26 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }
         else{
             Response.ErrorResponse(message="User does not exist")
+        }
+    }
+
+    override suspend fun ChangeImage(params: ImageParams): Response<Any> {
+        val result=userService.change_image(params.email, params.image)
+        return if(result){
+            Response.SuccessResponse(message = "Update completed")
+        }
+        else{
+            Response.ErrorResponse(message="Some problem")
+        }
+    }
+
+    override suspend fun ChangePassword(params: LoginUserParams): Response<Any> {
+        val result=userService.change_password(params.email, params.parol_user, params.new_parol)
+        return if(result){
+            Response.SuccessResponse(message = "Update completed")
+        }
+        else{
+            Response.ErrorResponse(message="Some problem")
         }
     }
 
