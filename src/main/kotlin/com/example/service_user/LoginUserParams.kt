@@ -1,4 +1,4 @@
-package com.example.service
+package com.example.service_user
 
 data class LoginUserParams (
     val email: String,

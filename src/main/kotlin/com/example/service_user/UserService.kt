@@ -1,4 +1,4 @@
-package com.example.service
+package com.example.service_user
 
 import com.example.user.UserDTO
 

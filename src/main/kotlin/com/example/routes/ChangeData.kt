@@ -1,8 +1,8 @@
 package com.example.routes
 
 import com.example.repository.UserRepository
-import com.example.service.ImageParams
-import com.example.service.LoginUserParams
+import com.example.service_user.ImageParams
+import com.example.service_user.LoginUserParams
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*

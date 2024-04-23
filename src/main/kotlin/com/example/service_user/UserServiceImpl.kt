@@ -1,4 +1,4 @@
-package com.example.service
+package com.example.service_user
 
 import com.example.data.DataBase.dbQuery
 import com.example.secure.JWTauth

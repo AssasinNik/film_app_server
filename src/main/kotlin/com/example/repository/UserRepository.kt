@@ -1,9 +1,9 @@
 package com.example.repository
 
-import com.example.service.CreateUserParams
-import com.example.service.ImageParams
-import com.example.service.LoginUserParams
-import com.example.service.TokenParams
+import com.example.service_user.CreateUserParams
+import com.example.service_user.ImageParams
+import com.example.service_user.LoginUserParams
+import com.example.service_user.TokenParams
 import com.example.utils.Response
 
 interface UserRepository {

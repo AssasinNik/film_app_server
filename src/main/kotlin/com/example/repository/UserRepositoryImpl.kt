@@ -1,7 +1,7 @@
 package com.example.repository
 
 import com.example.secure.JWTauth
-import com.example.service.*
+import com.example.service_user.*
 import com.example.utils.Response
 
 class UserRepositoryImpl(private val userService: UserService) : UserRepository {

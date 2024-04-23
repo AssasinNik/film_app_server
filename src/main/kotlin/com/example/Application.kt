@@ -2,13 +2,18 @@ package com.example
 
 import com.example.data.DataBase
 import com.example.plugins.*
+import com.example.repository.FilmRepository
+import com.example.repository.FilmRepositoryImpl
 import com.example.repository.UserRepository
 import com.example.repository.UserRepositoryImpl
 import com.example.routes.authRoutes
 import com.example.routes.changeData
+import com.example.routes.getFilm
 import com.example.secure.configureSecurity
-import com.example.service.UserService
-import com.example.service.UserServiceImpl
+import com.example.service_film.FilmService
+import com.example.service_film.FilmServiceImpl
+import com.example.service_user.UserService
+import com.example.service_user.UserServiceImpl
 import io.ktor.network.tls.certificates.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.jackson.*
@@ -54,12 +59,17 @@ fun Application.module() {
     configureSecurity()
 
 
-    val service: UserService=UserServiceImpl()
-    val repository: UserRepository=UserRepositoryImpl(service)
+    val service1: UserService=UserServiceImpl()
+    val repository1: UserRepository=UserRepositoryImpl(service1)
+    val service2: FilmService=FilmServiceImpl()
+    val repository2: FilmRepository=FilmRepositoryImpl(service2)
 
 
-    authRoutes(repository)
-    changeData(repository)
+
+    authRoutes(repository1)
+    changeData(repository1)
+    getFilm(repository2)
+
 
     configureRouting()
 }
