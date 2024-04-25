@@ -1,17 +1,14 @@
 package com.example.secure
 
 import io.ktor.util.*
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
+import de.mkammerer.argon2.Argon2Factory
 
-private val secret_key="89033212811"
-private val algorithm="HmacSHA256"
-
-private val hashKey= hex(secret_key)
-private val hmac_key=SecretKeySpec(hashKey, algorithm)
-
+private val argon2 = Argon2Factory.create()
 fun hash(password :String?) : String{
-    val hmac= Mac.getInstance(algorithm)
-    hmac.init(hmac_key)
-    return hex(hmac.doFinal(password?.toByteArray(Charsets.UTF_8)))
+        return argon2.hash(2, 65536, 1, password?.toCharArray())
 }
+fun verifyPassword(password: String, hash: String?): Boolean {
+        return argon2.verify(hash, password.toCharArray())
+}
+
+

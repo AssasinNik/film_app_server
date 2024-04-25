@@ -8,6 +8,7 @@ import com.example.user.UserDTO
 import com.example.user.Users
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 
 class FilmServiceImpl : FilmService {
@@ -21,7 +22,6 @@ class FilmServiceImpl : FilmService {
     }
 
     override suspend fun findFilm(): FilmDTO? {
-        val rnds = (100..6000).random()
         val film= DataBase.dbQuery {
             Film.select(Film.filmid.eq(100))
                 .map { rowToFilm(it) }.singleOrNull()

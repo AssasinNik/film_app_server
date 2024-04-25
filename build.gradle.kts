@@ -39,6 +39,8 @@ dependencies {
     implementation("org.postgresql:postgresql:42.3.3")
     implementation("com.zaxxer:HikariCP:5.0.1")
 
+    implementation("de.mkammerer:argon2-jvm:2.9")
+
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
