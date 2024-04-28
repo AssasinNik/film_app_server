@@ -8,6 +8,7 @@ import com.example.user.UserDTO
 import com.example.user.Users
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 
@@ -21,12 +22,13 @@ class FilmServiceImpl : FilmService {
         return user
     }
 
-    override suspend fun findFilm(): FilmDTO? {
-        val film= DataBase.dbQuery {
-            Film.select(Film.filmid.eq(100))
-                .map { rowToFilm(it) }.singleOrNull()
+    override suspend fun findNewFilm(): List<FilmDTO> {
+        val date: Int = 2024
+        val rating: Float = 6.2F
+        return DataBase.dbQuery {
+            Film.select((Film.releaseDate eq date) and (Film.rating_kp greaterEq rating))
+                .mapNotNull { rowToFilm(it) }
         }
-        return film
     }
     private fun rowToUser(row: ResultRow?): UserDTO? {
         return if(row == null) {

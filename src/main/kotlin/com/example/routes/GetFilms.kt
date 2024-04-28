@@ -18,7 +18,7 @@ fun Application.getFilm(repository: FilmRepository){
             }
             post("/new"){
                 val params = call.receive<TokenParams>()
-                val result = repository.getFilm(params)
+                val result = repository.getNewFilm(params)
                 call.respond(result.statusCode, result)
             }
         }

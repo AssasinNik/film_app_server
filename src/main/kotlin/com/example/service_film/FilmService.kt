@@ -5,5 +5,5 @@ import com.example.user.UserDTO
 
 interface FilmService {
     suspend fun findByToken(token: String): UserDTO?
-    suspend fun findFilm(): FilmDTO?
+    suspend fun findNewFilm(): List<FilmDTO>
 }

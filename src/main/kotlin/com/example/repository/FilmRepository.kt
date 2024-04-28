@@ -5,6 +5,6 @@ import com.example.utils.Response
 
 interface FilmRepository {
 
-    suspend fun getFilm(params: TokenParams) : Response<Any>
+    suspend fun getNewFilm(params: TokenParams) : Response<Any>
 
 }
