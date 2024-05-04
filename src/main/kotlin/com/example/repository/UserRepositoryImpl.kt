@@ -3,6 +3,8 @@ package com.example.repository
 import com.example.secure.JWTauth
 import com.example.service_user.*
 import com.example.utils.Response
+import io.ktor.http.content.*
+import java.io.File
 
 class UserRepositoryImpl(private val userService: UserService) : UserRepository {
     override suspend fun registerUser(params: CreateUserParams): Response<Any>{
@@ -47,13 +49,37 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }
     }
 
-    override suspend fun ChangeImage(params: ImageParams): Response<Any> {
-        val result=userService.change_image(params.email, params.image)
-        return if(result){
-            Response.SuccessResponse(message = "Update completed")
+    override suspend fun ChangeImage(params: TokenParams, multipart: MultiPartData): Response<Any> {
+        val user= userService.findByToken(params.token)
+        return if(user!=null){
+            var name = "";
+            multipart.forEachPart { part ->
+                when(part){
+                    is PartData.FileItem -> {
+                        val fileName = part.originalFileName as String
+                        val fileBytes = part.streamProvider().readBytes()
+                        name = fileName
+                        val file = File("uploads/$fileName")
+                        file.parentFile.mkdirs()
+                        file.writeBytes(fileBytes)
+                        part.dispose()
+                    }
+                    else -> {
+                        part.dispose()
+                    }
+                    }
+            }
+            val change = userService.change_image(user.email, name)
+            if(change == true){
+                Response.SuccessResponse(message="File upload")
+            }
+            else{
+                Response.ErrorResponse(message="Some problems")
+            }
+
         }
         else{
-            Response.ErrorResponse(message="Some problem")
+            Response.ErrorResponse(message="Some problems")
         }
     }
 

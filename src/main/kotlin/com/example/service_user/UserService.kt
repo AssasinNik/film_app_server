@@ -10,4 +10,6 @@ interface UserService {
     suspend fun change_image(email: String, image: String):Boolean
     suspend fun change_password(email: String, password: String, new_password: String?):Boolean
     suspend fun findByEmailwithParol(email: String):UserDTO?
+
+
 }
