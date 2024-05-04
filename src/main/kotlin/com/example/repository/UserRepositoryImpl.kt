@@ -5,6 +5,7 @@ import com.example.service_user.*
 import com.example.utils.Response
 import io.ktor.http.content.*
 import java.io.File
+import java.util.*
 
 class UserRepositoryImpl(private val userService: UserService) : UserRepository {
     override suspend fun registerUser(params: CreateUserParams): Response<Any>{
@@ -49,40 +50,48 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }
     }
 
-    override suspend fun ChangeImage(params: TokenParams, multipart: MultiPartData): Response<Any> {
-        val user= userService.findByToken(params.token)
-        return if(user!=null){
-            var name = "";
-            multipart.forEachPart { part ->
-                when(part){
-                    is PartData.FileItem -> {
-                        val fileName = part.originalFileName as String
-                        val fileBytes = part.streamProvider().readBytes()
-                        name = fileName
-                        val file = File("uploads/$fileName")
-                        file.parentFile.mkdirs()
-                        file.writeBytes(fileBytes)
-                        part.dispose()
+    override suspend fun ChangeImage(multipart: MultiPartData): Response<Any> {
+        var name = "";
+        var token: String = ""
+        multipart.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    if (part.name == "token") {
+                        token = part.value
                     }
-                    else -> {
-                        part.dispose()
-                    }
-                    }
+                }
+
+                is PartData.FileItem -> {
+                    val originalFileName = part.originalFileName
+                    val extension = originalFileName?.substringAfterLast('.', "")
+                    val fileName = "${UUID.randomUUID()}.$extension"
+                    val fileBytes = part.streamProvider().readBytes()
+                    name = fileName
+                    val file = File("uploads/$fileName")
+                    file.parentFile.mkdirs()
+                    file.writeBytes(fileBytes)
+                    part.dispose()
+                }
+
+                else -> {
+                    part.dispose()
+                }
             }
+        }
+        val user = userService.findByToken(token)
+        if(user != null){
             val change = userService.change_image(user.email, name)
             if(change == true){
-                Response.SuccessResponse(message="File upload")
+                return Response.SuccessResponse(message = "Image has been saved")
             }
             else{
-                Response.ErrorResponse(message="Some problems")
+                return Response.ErrorResponse(message = "Some problems")
             }
-
         }
         else{
-            Response.ErrorResponse(message="Some problems")
+            return Response.ErrorResponse(message = "No user")
         }
     }
-
     override suspend fun ChangePassword(params: LoginUserParams): Response<Any> {
         val result=userService.change_password(params.email, params.parol_user, params.new_parol)
         return if(result){

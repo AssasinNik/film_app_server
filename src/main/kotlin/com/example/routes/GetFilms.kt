@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.repository.FilmRepository
+import com.example.service_user.MoodParams
 import com.example.service_user.TokenParams
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -11,7 +12,9 @@ fun Application.getFilm(repository: FilmRepository){
     routing {
         route("/films"){
             post("/movie_for_mood"){
-                TODO("For mood")
+                val params = call.receive<MoodParams>()
+                val result=repository.getMovieMood(params)
+                call.respond(result.statusCode, result)
             }
             post("/new"){
                 val params = call.receive<TokenParams>()

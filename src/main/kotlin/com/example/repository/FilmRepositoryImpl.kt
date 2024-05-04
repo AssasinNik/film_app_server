@@ -2,6 +2,7 @@ package com.example.repository
 
 
 import com.example.service_film.FilmService
+import com.example.service_user.MoodParams
 import com.example.service_user.TokenParams
 import com.example.service_user.UserService
 import com.example.utils.Response
@@ -11,6 +12,16 @@ class FilmRepositoryImpl (private val filmService: FilmService) : FilmRepository
         val user = filmService.findByToken(params.token)
         return if(user!=null){
             val film=filmService.findNewFilm()
+            return Response.SuccessResponse(data=film)
+        }
+        else{
+            Response.ErrorResponse(message="User does not exist")
+        }
+    }
+    override suspend fun getMovieMood(params: MoodParams): Response<Any> {
+        val user = filmService.findByToken(params.token)
+        return if(user!=null){
+            val film=filmService.findFilmMood(params.genres)
             return Response.SuccessResponse(data=film)
         }
         else{

@@ -11,5 +11,5 @@ interface UserRepository {
     suspend fun loginUser(params: LoginUserParams): Response<Any>
     suspend fun InfoByToken(params: TokenParams): Response<Any>
     suspend fun ChangePassword(params: LoginUserParams): Response<Any>
-    suspend fun ChangeImage(params: TokenParams, multipart: MultiPartData): Response<Any>
+    suspend fun ChangeImage(multipart: MultiPartData): Response<Any>
 }

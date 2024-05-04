@@ -20,6 +20,7 @@ application {
 }
 
 repositories {
+    google()
     mavenCentral()
 }
 
@@ -32,16 +33,17 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("commons-codec:commons-codec:1.16.0")
-    implementation("org.jetbrains.exposed:exposed-core:0.49.0")
-    implementation("org.jetbrains.exposed:exposed-dao:0.49.0")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.49.0")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.49.0")
+    implementation("org.jetbrains.exposed:exposed-core:0.48.0")
+    implementation("org.jetbrains.exposed:exposed-dao:0.48.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.48.0")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.48.0")
     implementation("org.postgresql:postgresql:42.3.3")
     implementation("com.zaxxer:HikariCP:5.0.1")
 
     implementation("de.mkammerer:argon2-jvm:2.9")
 
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
+
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

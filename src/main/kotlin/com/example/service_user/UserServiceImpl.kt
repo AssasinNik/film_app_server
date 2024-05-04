@@ -6,9 +6,11 @@ import com.example.secure.hash
 import com.example.secure.verifyPassword
 import com.example.user.UserDTO
 import com.example.user.Users
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.update
 
 class UserServiceImpl : UserService {
     override suspend fun registerUser(params: CreateUserParams): UserDTO? {
@@ -24,15 +26,16 @@ class UserServiceImpl : UserService {
     }
 
     override suspend fun findByEmail(email: String): UserDTO? {
+
         val user= dbQuery {
-            Users.selectAll().where(Users.email.eq(email))
+            Users.selectAll().where { Users.email eq email }
                 .map { rowToUser(it) }.singleOrNull()
         }
         return user
     }
     override suspend fun findByEmailwithParol(email: String): UserDTO? {
         val user= dbQuery {
-            Users.selectAll().where(Users.email.eq(email))
+            Users.selectAll().where { Users.email.eq(email) }
                 .map { allrowToUser(it) }.singleOrNull()
         }
         return user
@@ -42,7 +45,7 @@ class UserServiceImpl : UserService {
         return if (first != null) {
             if(verifyPassword(password, first.parol)){
                 val user= dbQuery {
-                    Users.selectAll().where(Users.email.eq(email))
+                    Users.selectAll().where { Users.email.eq(email) }
                         .map { rowToUser(it) }.singleOrNull()
                 }
                 user
@@ -57,7 +60,7 @@ class UserServiceImpl : UserService {
     override suspend fun findByToken(token: String): UserDTO? {
         val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
         val user= dbQuery {
-            Users.selectAll().where(Users.email.eq(decode))
+            Users.selectAll().where { Users.email.eq(decode) }
                 .map { rowToUser(it) }.singleOrNull()
         }
         return user
@@ -82,7 +85,7 @@ class UserServiceImpl : UserService {
         return if(user!=null){
             dbQuery {
                 Users.update({ Users.email eq email }) {
-                    it[Users.parol_user]=hash(new_password)
+                    it[parol_user]=hash(new_password)
                 }
             }
             true
