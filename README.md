@@ -1,6 +1,6 @@
 # Project: MovieAPI Server
 
-![Kotlin](https://img.shields.io/badge/Kotlin-1.5.21-blue)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-blue)
 ![Ktor](https://img.shields.io/badge/Ktor-1.6.8-blue)
 ![HikariCP](https://img.shields.io/badge/HikariCP-5.0.1-blue)
 ![Jackson](https://img.shields.io/badge/Jackson-Enabled-green)
