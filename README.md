@@ -1,12 +1,12 @@
 # Project: MovieAPI Server
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.5.21-blue)
-![Ktor](https://img.shields.io/badge/Ktor-1.6.4-blue)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13.3-blue)
-![HikariCP](https://img.shields.io/badge/HikariCP-3.4.5-blue)
-![Jackson](https://img.shields.io/badge/Jackson-2.12.3-blue)
+![Ktor](https://img.shields.io/badge/Ktor-1.6.8-blue)
+![HikariCP](https://img.shields.io/badge/HikariCP-5.0.1-blue)
+![Jackson](https://img.shields.io/badge/Jackson-Enabled-green)
 ![SSL](https://img.shields.io/badge/SSL-Enabled-green)
 ![JWT](https://img.shields.io/badge/JWT-Enabled-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Enabled-green)
 
 ## Описание
 Этот проект представляет собой сервер API, написанный на Kotlin с использованием Ktor, предназначенный для работы в проекте Samsung Innovation Campus. Сервер позволяет пользователям регистрироваться, аутентифицироваться, загружать изображения, искать новинки фильмов и находить фильмы по жанрам.
@@ -44,7 +44,7 @@
 2. Настройте базу данных PostgreSQL:
    - Создайте базу данных для приложения.
    - Создайте пользователя и назначьте ему права на базу данных.
-   - Обновите конфигурационный файл `application.conf` с данными о базе данных.
+   - Обновите файл `Database.kt` с данными о базе данных.
 
 3. Сконфигурируйте SSL (если используется):
    - Убедитесь, что у вас есть сертификат и ключ SSL.
