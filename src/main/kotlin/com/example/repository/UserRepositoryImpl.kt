@@ -79,17 +79,19 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
             }
         }
         val user = userService.findByToken(token)
-        if(user != null){
+        return if(user != null){
+            if(user.image != null){
+                val prevFile = File("uploads/${user.image}")
+                prevFile.delete()
+            }
             val change = userService.change_image(user.email, name)
-            if(change == true){
-                return Response.SuccessResponse(message = "Image has been saved")
+            if(change){
+                Response.SuccessResponse(data = name, message = "Image has been saved")
+            } else{
+                Response.ErrorResponse(message = "Some problems")
             }
-            else{
-                return Response.ErrorResponse(message = "Some problems")
-            }
-        }
-        else{
-            return Response.ErrorResponse(message = "No user")
+        } else{
+            Response.ErrorResponse(message = "No user")
         }
     }
     override suspend fun ChangePassword(params: LoginUserParams): Response<Any> {

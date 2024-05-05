@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "jdbc:postgresql://dpg-coh6tsev3ddc73fip3b0-a:5432/film_app_150e?user=film_app_150e_user&password=99gpLFPfTNPB6yHVUBfvflg8Q4Zcwlyb"
+      SSL_KEYSTORE_PATH: "/app/keystore.jks"
+      SSL_KEYSTORE_PASSWORD: "parol1810"
