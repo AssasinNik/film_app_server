@@ -4,13 +4,12 @@ import com.example.data.DataBase.dbQuery
 import com.example.secure.JWTauth
 import com.example.secure.hash
 import com.example.secure.verifyPassword
+import com.example.user.Tokens
 import com.example.user.UserDTO
 import com.example.user.Users
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.update
 
 class UserServiceImpl : UserService {
     override suspend fun registerUser(params: CreateUserParams): UserDTO? {
@@ -22,14 +21,14 @@ class UserServiceImpl : UserService {
                 it[username]=params.username
             }
         }
-        return rowToUser(statement?.resultedValues?.get(0))
+        return allrowToUser(statement?.resultedValues?.get(0))
     }
 
     override suspend fun findByEmail(email: String): UserDTO? {
 
         val user= dbQuery {
             Users.selectAll().where { Users.email eq email }
-                .map { rowToUser(it) }.singleOrNull()
+                .map { allrowToUser(it) }.singleOrNull()
         }
         return user
     }
@@ -46,7 +45,7 @@ class UserServiceImpl : UserService {
             if(verifyPassword(password, first.parol)){
                 val user= dbQuery {
                     Users.selectAll().where { Users.email.eq(email) }
-                        .map { rowToUser(it) }.singleOrNull()
+                        .map { allrowToUser(it) }.singleOrNull()
                 }
                 user
             } else{
@@ -58,12 +57,19 @@ class UserServiceImpl : UserService {
     }
 
     override suspend fun findByToken(token: String): UserDTO? {
-        val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
-        val user= dbQuery {
-            Users.selectAll().where { Users.email.eq(decode) }
-                .map { rowToUser(it) }.singleOrNull()
+
+        return if (dbQuery{
+                Tokens.selectAll().where { Tokens.token eq token }
+                .count() > 0}){
+            val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
+            val user= dbQuery {
+                Users.selectAll().where { Users.email.eq(decode) }
+                    .map { allrowToUser(it) }.singleOrNull()
+            }
+            user
+        } else{
+            null
         }
-        return user
     }
 
     override suspend fun change_image(email: String, image: String): Boolean {
@@ -80,7 +86,7 @@ class UserServiceImpl : UserService {
         }
     }
 
-    override suspend fun change_password(email: String, password: String, new_password: String?): Boolean {
+    override suspend fun change_password(email: String, password: String, new_password: String?, token: String): Boolean {
         val user= findUser(email, password)
         return if(user!=null){
             dbQuery {
@@ -88,9 +94,21 @@ class UserServiceImpl : UserService {
                     it[parol_user]=hash(new_password)
                 }
             }
+            dbQuery {
+                Tokens.deleteWhere{ Tokens.token eq token }
+            }
             true
         } else{
             false
+        }
+    }
+
+    override suspend fun registerToken(token: String) {
+        var statement: InsertStatement<Number>? = null
+        dbQuery {
+            statement=Tokens.insert {
+                it[Tokens.token]=token
+            }
         }
     }
 

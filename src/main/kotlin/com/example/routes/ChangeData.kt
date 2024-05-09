@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.repository.UserRepository
 import com.example.service_user.LoginUserParams
+import com.example.service_user.PasswordParams
 import com.example.service_user.TokenParams
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -15,7 +16,7 @@ fun Application.changeData(repository: UserRepository){
     routing {
         route("/change"){
             post("/password"){
-                val params = call.receive<LoginUserParams>()
+                val params = call.receive<PasswordParams>()
                 val result = repository.ChangePassword(params)
                 call.respond(result.statusCode, result)
             }

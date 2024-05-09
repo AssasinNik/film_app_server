@@ -4,6 +4,7 @@ import com.example.data.DataBase
 import com.example.films.Film
 import com.example.films.FilmDTO
 import com.example.secure.JWTauth
+import com.example.user.Tokens
 import com.example.user.UserDTO
 import com.example.user.Users
 import org.jetbrains.exposed.sql.*
@@ -12,12 +13,20 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 
 class FilmServiceImpl : FilmService {
     override suspend fun findByToken(token: String): UserDTO? {
-        val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
-        val user= DataBase.dbQuery {
-            Users.selectAll().where(Users.email.eq(decode))
-                .map { rowToUser(it) }.singleOrNull()
+
+        return if (DataBase.dbQuery {
+                Tokens.selectAll().where { Tokens.token eq token }
+                    .count() > 0
+            }){
+            val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
+            val user= DataBase.dbQuery {
+                Users.selectAll().where { Users.email.eq(decode) }
+                    .map { rowToUser(it) }.singleOrNull()
+            }
+            user
+        } else{
+            null
         }
-        return user
     }
 
     override suspend fun findNewFilm(): List<FilmDTO> {
@@ -43,6 +52,7 @@ class FilmServiceImpl : FilmService {
             email= row[Users.email],
             username = row[Users.username],
             image = row[Users.image],
+            parol = row[Users.parol_user]
         )
     }
     private fun rowToFilm(row: ResultRow?): FilmDTO? {
