@@ -98,6 +98,8 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
     override suspend fun ChangePassword(params: PasswordParams): Response<Any> {
         val result=userService.change_password(params.email, params.parol_user, params.new_parol, params.token)
         return if(result){
+            val token = JWTauth.instance.createToken(params.email)
+            userService.registerToken(token)
             Response.SuccessResponse(message = "Update completed")
         }
         else{
