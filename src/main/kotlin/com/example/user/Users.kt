@@ -10,3 +10,4 @@ object Users: Table("users") {
     val image=Users.varchar("image", 150)
     override val primaryKey=PrimaryKey(id)
 }
+

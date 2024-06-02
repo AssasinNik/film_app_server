@@ -23,7 +23,6 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
             }
         }
     }
-
     override suspend fun loginUser(params: LoginUserParams): Response<Any> {
         val user= userService.findUser(params.email, params.parol_user)
         return if(isEmailExist(params.email)){
@@ -104,6 +103,16 @@ class UserRepositoryImpl(private val userService: UserService) : UserRepository 
         }
         else{
             Response.ErrorResponse(message="Some problem")
+        }
+    }
+
+    override suspend fun ChangeUsername(params: ChangeUsernameParams): Response<Any> {
+        val result = userService.changeUsername(params.token, params.username)
+        return if(result){
+            Response.SuccessResponse(message = "Update completed")
+        }
+        else{
+            Response.ErrorResponse(message="No user")
         }
     }
 

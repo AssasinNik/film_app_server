@@ -86,6 +86,21 @@ class UserServiceImpl : UserService {
         }
     }
 
+    override suspend fun changeUsername(token: String, new_username: String): Boolean {
+        val user = findByToken(token)
+        return if(user!=null){
+            val decode: String = JWTauth.instance.decodeToken(token, "back-to-the-future")
+            dbQuery {
+                Users.update({Users.email eq decode}){
+                    it[Users.username]=new_username
+                }
+            }
+            true
+        }
+        else{
+            false
+        }
+    }
     override suspend fun change_password(email: String, password: String, new_password: String?, token: String): Boolean {
         val user= findUser(email, password)
         return if(user!=null){

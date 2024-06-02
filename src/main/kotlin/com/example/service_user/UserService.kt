@@ -11,5 +11,6 @@ interface UserService {
     suspend fun change_password(email: String, password: String, new_password: String?, token: String):Boolean
     suspend fun findByEmailwithParol(email: String):UserDTO?
     suspend fun registerToken(token: String)
+    suspend fun changeUsername(token: String, new_username: String):Boolean
 
 }

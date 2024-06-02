@@ -1,9 +1,6 @@
 package com.example.repository
 
-import com.example.service_user.CreateUserParams
-import com.example.service_user.LoginUserParams
-import com.example.service_user.PasswordParams
-import com.example.service_user.TokenParams
+import com.example.service_user.*
 import com.example.utils.Response
 import io.ktor.http.content.*
 
@@ -13,4 +10,5 @@ interface UserRepository {
     suspend fun InfoByToken(params: TokenParams): Response<Any>
     suspend fun ChangePassword(params: PasswordParams): Response<Any>
     suspend fun ChangeImage(multipart: MultiPartData): Response<Any>
+    suspend fun ChangeUsername( params: ChangeUsernameParams): Response<Any>
 }

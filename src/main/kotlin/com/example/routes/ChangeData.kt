@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.repository.UserRepository
+import com.example.service_user.ChangeUsernameParams
 import com.example.service_user.LoginUserParams
 import com.example.service_user.PasswordParams
 import com.example.service_user.TokenParams
@@ -23,6 +24,11 @@ fun Application.changeData(repository: UserRepository){
             post("/image"){
                 val multipart = call.receiveMultipart()
                 val result = repository.ChangeImage(multipart)
+                call.respond(result.statusCode, result)
+            }
+            post("/username"){
+                val params = call.receive<ChangeUsernameParams>()
+                val result = repository.ChangeUsername(params)
                 call.respond(result.statusCode, result)
             }
             get("/images/{fileName}") {
