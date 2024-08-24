@@ -1,4 +1,4 @@
-# Project: MovieAPI Server
+# Project: FilmAPI Server
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-blue)
 ![Ktor](https://img.shields.io/badge/Ktor-1.6.8-blue)
@@ -38,7 +38,7 @@
 1. Клонируйте репозиторий:
    ```bash
    git clone https://github.com/AssasinNik/film_app_server.git
-   cd movieapi-server
+   cd filmapi-server
    ```
 
 2. Настройте базу данных PostgreSQL:
